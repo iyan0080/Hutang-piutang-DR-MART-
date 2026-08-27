@@ -1,0 +1,6 @@
+{
+  "name": "Buku Hutang Piutang",
+  "description": "Aplikasi pencatatan hutang piutang real-time Firebase Cloud untuk multi-perangkat (HP/PC), pencarian dan filter canggih, manajemen kategori, serta export Excel (.XLSX).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
