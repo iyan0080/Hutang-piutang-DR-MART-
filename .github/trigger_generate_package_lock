@@ -1,0 +1,5 @@
+Trigger file for Generate package-lock workflow
+
+This file is used as a no-op change to trigger the Generate package-lock workflow.
+
+Timestamp: 2026-08-27T12:40:00Z
