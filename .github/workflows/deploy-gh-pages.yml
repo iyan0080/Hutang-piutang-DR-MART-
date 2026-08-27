@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
@@ -17,6 +19,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
+
+      - name: Clean node_modules and package-lock
+        run: rm -rf node_modules package-lock.json || true
 
       - name: Install dependencies
         run: npm install
