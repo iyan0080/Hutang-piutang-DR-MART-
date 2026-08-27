@@ -5,7 +5,8 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    base: './',
+    // Set base for GitHub Pages project site
+    base: '/Hutang-piutang-DR-MART-/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
