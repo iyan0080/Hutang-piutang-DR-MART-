@@ -16,10 +16,13 @@ jobs:
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '18.x'
 
       - name: Install dependencies
         run: npm install
+
+      - name: Rebuild native modules (fix optional deps bindings)
+        run: npm rebuild --update-binary || true
 
       - name: Build
         run: npm run build
