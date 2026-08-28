@@ -34,6 +34,19 @@ function mapFirebaseUser(user: FirebaseUser): UserProfile {
 }
 
 export const authService = {
+  // Get active cached session synchronously
+  getCurrentUser(): UserProfile | null {
+    const saved = localStorage.getItem(LOCAL_AUTH_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  },
+
   // Subscribe to auth changes
   subscribe(callback: (user: UserProfile | null) => void): () => void {
     // Initial check from localStorage for instant offline/fast load

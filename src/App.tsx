@@ -10,6 +10,7 @@ import { HistoryModal } from './components/HistoryModal';
 import { ExportModal } from './components/ExportModal';
 import { CategoryManagerModal } from './components/CategoryManagerModal';
 import { AuthModal, AuthViewMode } from './components/AuthModal';
+import { AuthGate } from './components/AuthGate';
 import { authService } from './lib/authService';
 import { 
   DebtTransaction, 
@@ -44,8 +45,9 @@ export default function App() {
   );
   const [isCloudSynced, setIsCloudSynced] = useState(false);
 
-  // Authentication State
-  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+  // Authentication State (Mandatory login before accessing the app)
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => authService.getCurrentUser());
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<AuthViewMode>('login');
   
@@ -86,7 +88,23 @@ export default function App() {
     // Subscribe to Auth status
     const unsubscribeAuth = authService.subscribe((user) => {
       setCurrentUser(user);
+      setIsAuthChecking(false);
     });
+
+    // Purge local storage demo data if present
+    try {
+      const rawLocal = localStorage.getItem('buku_hutang_piutang_v1');
+      if (rawLocal) {
+        const parsed = JSON.parse(rawLocal);
+        if (Array.isArray(parsed)) {
+          const demoIds = ['TRX-101', 'TRX-102', 'TRX-103', 'TRX-104', 'TRX-105', 'TRX-106'];
+          const cleaned = parsed.filter((t: any) => !demoIds.includes(t.id));
+          localStorage.setItem('buku_hutang_piutang_v1', JSON.stringify(cleaned));
+        }
+      }
+    } catch {
+      // ignore
+    }
 
     // Seed defaults in Firestore if collections are empty
     initializeDefaultsIfEmpty();
@@ -351,6 +369,17 @@ export default function App() {
     await authService.logout();
     setCurrentUser(null);
   };
+
+  // Mandatory Authentication Gate: user must log in before accessing the app
+  if (!currentUser) {
+    return (
+      <AuthGate
+        onAuthSuccess={(user) => {
+          setCurrentUser(user);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950/5 text-slate-900 flex flex-col font-sans selection:bg-teal-500 selection:text-white">

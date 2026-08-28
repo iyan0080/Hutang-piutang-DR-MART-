@@ -366,22 +366,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   <button
                     onClick={() => {
-                      if (confirm('Muat ulang data percontohan awal ke Firebase Cloud? Data transaksi Anda akan direset ke demo set.')) {
-                        onResetData();
-                        setShowMenu(false);
-                      }
-                    }}
-                    className="w-full text-left px-3.5 py-2 hover:bg-slate-700 flex items-center gap-2.5 text-slate-200 cursor-pointer transition-colors"
-                  >
-                    <RotateCcw className="w-4 h-4 text-amber-400" />
-                    <span>Muat Data Contoh Demo</span>
-                  </button>
-
-                  <div className="my-1 border-t border-slate-700/60"></div>
-
-                  <button
-                    onClick={() => {
-                      if (confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SEMUA data di Firebase Cloud? Tindakan ini tidak dapat dibatalkan.')) {
+                      if (confirm('PERINGATAN: Apakah Anda yakin ingin menghapus SEMUA data transaksi dan pelanggan di Firebase Cloud? Tindakan ini tidak dapat dibatalkan.')) {
                         onClearAll();
                         setShowMenu(false);
                       }
@@ -389,7 +374,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="w-full text-left px-3.5 py-2 hover:bg-rose-950/60 flex items-center gap-2.5 text-rose-400 cursor-pointer transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
-                    <span>Hapus Semua Data</span>
+                    <span>Hapus Semua Data Transaksi</span>
                   </button>
                 </div>
               )}
