@@ -1,5 +1,5 @@
-This file was added as a temporary no-op trigger to start the Generate package-lock workflow.
+This file has been marked SAFE TO DELETE.
 
-The generate-package-lock workflow has been reverted to manual dispatch only (workflow_dispatch), so this file is no longer needed and is safe to delete.
+Requested by repository owner via GitHub Copilot Chat Assistant on 2026-08-28.
 
-I cannot delete files directly from the repository with the current automation, so please delete this file manually if you want it removed entirely.
+You can safely remove this file from the repository using the GitHub UI or `git rm .github/trigger_generate_package_lock` followed by a commit and push.
