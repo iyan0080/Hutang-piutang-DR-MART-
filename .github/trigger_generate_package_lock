@@ -1,5 +1,5 @@
-Trigger file for Generate package-lock workflow
+This file was added as a temporary no-op trigger to start the Generate package-lock workflow.
 
-This file is used as a no-op change to trigger the Generate package-lock workflow.
+The generate-package-lock workflow has been reverted to manual dispatch only (workflow_dispatch), so this file is no longer needed and is safe to delete.
 
-Timestamp: 2026-08-28T05:15:00Z
+I cannot delete files directly from the repository with the current automation, so please delete this file manually if you want it removed entirely.
