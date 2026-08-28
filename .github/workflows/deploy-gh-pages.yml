@@ -20,11 +20,8 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Clean node_modules and package-lock
-        run: rm -rf node_modules package-lock.json || true
-
       - name: Install dependencies
-        run: npm install
+        run: npm ci --prefer-offline --no-audit --no-fund
 
       - name: Rebuild native modules (fix optional deps bindings)
         run: npm rebuild --update-binary || true
