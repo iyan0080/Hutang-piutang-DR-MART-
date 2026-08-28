@@ -1,0 +1,4 @@
+---
+path: .github/trigger_generate_package_lock
+message: chore: remove noop trigger file
+---
