@@ -36,27 +36,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Ensure GitHub Pages is enabled (create site if missing)
-        env:
-          OWNER: ${{ github.repository_owner }}
-          REPO: ${{ github.event.repository.name }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Enabling GitHub Pages for $OWNER/$REPO if not already enabled"
-          curl -s -X PUT \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/$OWNER/$REPO/pages \
-            -d '{"source":{"branch":"gh-pages","path":"/"}}' || true
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to gh-pages branch (JamesIves)
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: './dist'
-
-      - name: Deploy to GitHub Pages
+          branch: gh-pages
+          folder: ./dist
+          clean: true
+          token: ${{ secrets.GITHUB_TOKEN }}
         id: deployment
-        uses: actions/deploy-pages@v4
