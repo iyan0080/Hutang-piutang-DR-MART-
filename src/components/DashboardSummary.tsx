@@ -76,46 +76,6 @@ export const DashboardSummary: React.FC<DashboardSummaryProps> = ({
   return (
     <div className="space-y-6 sm:space-y-8">
       
-      {/* Top Quick Actions: Tambah Piutang & Tambah Hutang */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-sm">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-          <div>
-            <h3 className="text-sm sm:text-base font-bold text-slate-900">
-              Pencatatan Transaksi Cepat
-            </h3>
-            <p className="text-xs text-slate-500">
-              Pilih jenis transaksi yang ingin ditambahkan ke buku catatan
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2.5 sm:flex sm:items-center w-full sm:w-auto">
-            {/* Tombol Tambah Piutang */}
-            <button
-              id="btn-tambah-piutang-dashboard"
-              onClick={() => onOpenAddModal('piutang')}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm hover:shadow transition-all duration-150 cursor-pointer"
-            >
-              <div className="p-0.5 bg-emerald-700/60 rounded-md">
-                <ArrowDownLeft className="w-4 h-4 text-emerald-100" />
-              </div>
-              <span>+ Tambah Piutang</span>
-            </button>
-
-            {/* Tombol Tambah Hutang */}
-            <button
-              id="btn-tambah-hutang-dashboard"
-              onClick={() => onOpenAddModal('hutang')}
-              className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-sm hover:shadow transition-all duration-150 cursor-pointer"
-            >
-              <div className="p-0.5 bg-rose-700/60 rounded-md">
-                <ArrowUpRight className="w-4 h-4 text-rose-100" />
-              </div>
-              <span>+ Tambah Hutang</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Prominent Section: DAFTAR PELANGGAN PADA DASBOR */}
       <section aria-label="Daftar Pelanggan">
         <CustomerDirectory

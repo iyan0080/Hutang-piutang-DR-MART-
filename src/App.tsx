@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Plus } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { DashboardSummary } from './components/DashboardSummary';
 import { TransactionList } from './components/TransactionList';
@@ -474,6 +475,21 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Floating Action Button (FAB): 1 Tombol Tambah Transaksi */}
+      <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-40">
+        <button
+          id="btn-floating-tambah-transaksi"
+          onClick={() => handleOpenAddModal('piutang')}
+          className="group inline-flex items-center gap-2.5 px-5 py-3.5 sm:px-6 sm:py-4 rounded-full font-bold text-sm sm:text-base text-white bg-teal-600 hover:bg-teal-500 active:scale-95 shadow-xl hover:shadow-2xl hover:shadow-teal-900/30 ring-2 ring-white/30 transition-all duration-200 cursor-pointer"
+          title="Tambah Catatan Transaksi Baru"
+        >
+          <div className="p-1 bg-white/20 rounded-full flex items-center justify-center">
+            <Plus className="w-5 h-5 sm:w-5 sm:h-5 text-white transition-transform group-hover:rotate-90 duration-200" />
+          </div>
+          <span className="tracking-wide shadow-xs">Tambah Transaksi</span>
+        </button>
+      </div>
 
       {/* Modal: Drill-down Riwayat Transaksi Pelanggan */}
       {selectedCustomerName && (
