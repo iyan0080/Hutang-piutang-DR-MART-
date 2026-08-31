@@ -3,6 +3,8 @@ import { X, CheckCircle2, DollarSign, Calendar, FileText, Trash2, ArrowDownLeft,
 import confetti from 'canvas-confetti';
 import { DebtTransaction, PaymentRecord } from '../types';
 import { formatNumberInput, parseNumberInput, formatRupiah, formatDate, formatDateTime } from '../utils/formatters';
+import { evaluateMathExpression } from '../utils/mathEvaluator';
+import { CalculatorAmountInput } from './CalculatorAmountInput';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -31,13 +33,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     ? Math.min(100, Math.round((transaction.paidAmount / transaction.amount) * 100))
     : 0;
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value;
-    const formatted = formatNumberInput(raw);
-    setAmountStr(formatted);
-    setError('');
-  };
-
   const setQuickAmount = (ratio: number) => {
     const targetAmount = Math.round(transaction.remainingAmount * ratio);
     setAmountStr(formatNumberInput(targetAmount));
@@ -46,7 +41,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const numAmount = parseNumberInput(amountStr);
+    const evaluated = evaluateMathExpression(amountStr);
+    const numAmount = evaluated !== null && evaluated > 0 ? evaluated : parseNumberInput(amountStr);
 
     if (!numAmount || numAmount <= 0) {
       setError('Nominal pembayaran harus lebih dari Rp 0');
@@ -81,8 +77,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     setNote('');
     onClose();
   };
-
-  const parsedAmount = parseNumberInput(amountStr);
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
@@ -144,12 +138,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-bold text-slate-700">
-                    Nominal {isPiutang ? 'Yang Diterima' : 'Yang Dibayarkan'} (Rp)
-                  </label>
-                  
-                  {/* Quick percentage buttons */}
                   <div className="flex items-center gap-1.5">
+                    {/* Quick percentage buttons */}
                     <button
                       type="button"
                       onClick={() => setQuickAmount(1)}
@@ -169,28 +159,18 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   </div>
                 </div>
 
-                <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">
-                    Rp
-                  </span>
-                  <input
-                    type="text"
-                    placeholder="0"
-                    value={amountStr}
-                    onChange={handleAmountChange}
-                    className={`w-full pl-10 pr-4 py-2.5 bg-slate-50 border rounded-xl text-sm font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-                      error ? 'border-rose-400' : 'border-slate-200'
-                    }`}
-                  />
-                </div>
-                {parsedAmount > 0 && (
-                  <p className="text-xs text-teal-700 font-semibold mt-1">
-                    Nominal: {formatRupiah(parsedAmount)}
-                  </p>
-                )}
-                {error && (
-                  <p className="text-xs text-rose-500 font-medium mt-1">{error}</p>
-                )}
+                <CalculatorAmountInput
+                  id="payment-modal-amount-input"
+                  label={`Nominal ${isPiutang ? 'Yang Diterima' : 'Yang Dibayarkan'} (Rp)`}
+                  required
+                  placeholder="0"
+                  value={amountStr}
+                  onChange={(val) => {
+                    setAmountStr(val);
+                    setError('');
+                  }}
+                  error={error}
+                />
               </div>
 
               {/* Payment Date & Note */}

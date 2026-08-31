@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import { DebtTransaction, TransactionType, CustomCategoryItem } from '../types';
 import { formatNumberInput, parseNumberInput, formatRupiah } from '../utils/formatters';
+import { evaluateMathExpression } from '../utils/mathEvaluator';
+import { CalculatorAmountInput } from './CalculatorAmountInput';
 
 interface TransactionModalProps {
   isOpen: boolean;
@@ -124,12 +126,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value;
-    const formatted = formatNumberInput(raw);
-    setAmountStr(formatted);
-  };
-
   const handleSelectExistingCustomer = (selectedName: string) => {
     if (selectedName === '__NEW__') {
       setCustomerMode('new');
@@ -153,7 +149,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
       newErrors.contactName = 'Nama pihak/pelanggan wajib diisi atau dipilih';
     }
 
-    const numAmount = parseNumberInput(amountStr);
+    const evaluated = evaluateMathExpression(amountStr);
+    const numAmount = evaluated !== null && evaluated > 0 ? evaluated : parseNumberInput(amountStr);
     if (!numAmount || numAmount <= 0) {
       newErrors.amount = 'Nominal harus lebih dari Rp 0';
     }
@@ -181,8 +178,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     });
     onClose();
   };
-
-  const parsedAmount = parseNumberInput(amountStr);
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
@@ -385,34 +380,21 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             )}
           </div>
 
-          {/* Amount (Nominal) */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              Nominal Transaksi (Rupiah) <span className="text-rose-500">*</span>
-            </label>
-            <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">
-                Rp
-              </span>
-              <input
-                type="text"
-                placeholder="0"
-                value={amountStr}
-                onChange={handleAmountChange}
-                className={`w-full pl-10 pr-4 py-2.5 bg-slate-50 border rounded-xl text-sm sm:text-base font-bold text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-                  errors.amount ? 'border-rose-400' : 'border-slate-200'
-                }`}
-              />
-            </div>
-            {parsedAmount > 0 && (
-              <p className="text-xs text-teal-700 font-semibold mt-1">
-                Terbaca: {formatRupiah(parsedAmount)}
-              </p>
-            )}
-            {errors.amount && (
-              <p className="text-[11px] text-rose-500 mt-1">{errors.amount}</p>
-            )}
-          </div>
+          {/* Amount (Nominal) with Built-in Calculator */}
+          <CalculatorAmountInput
+            id="transaction-modal-amount-input"
+            label="Nominal Transaksi (Rupiah)"
+            required
+            placeholder="0"
+            value={amountStr}
+            onChange={(val) => {
+              setAmountStr(val);
+              if (errors.amount) {
+                setErrors(prev => ({ ...prev, amount: '' }));
+              }
+            }}
+            error={errors.amount}
+          />
 
           {/* Transaction Date */}
           <div>
