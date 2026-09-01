@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
+  Plus,
   PlusCircle, 
   FileSpreadsheet, 
   RotateCcw, 
@@ -167,6 +168,19 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Action Buttons */}
           <div className="flex items-center space-x-2 sm:space-x-3">
             
+            {/* Primary Top Action Button: + Tambah Transaksi */}
+            <button
+              id="btn-top-tambah-transaksi"
+              onClick={onOpenAddModal}
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-teal-500 hover:bg-teal-400 active:scale-95 text-slate-950 shadow-md hover:shadow-lg hover:shadow-teal-900/30 ring-1 ring-white/20 transition-all duration-150 cursor-pointer shrink-0"
+              title="Tambah Catatan Transaksi Baru"
+            >
+              <div className="p-0.5 bg-slate-950/15 rounded-md flex items-center justify-center">
+                <Plus className="w-4 h-4 text-slate-950 stroke-[2.5]" />
+              </div>
+              <span className="tracking-tight sm:tracking-normal">Tambah Transaksi</span>
+            </button>
+
             {/* Category Manager */}
             <button
               onClick={onOpenCategoryManager}
