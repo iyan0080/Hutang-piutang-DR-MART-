@@ -486,6 +486,7 @@ export default function App() {
           onOpenEditModal={handleOpenEditModal}
           onDeleteTransaction={handleDeleteTransaction}
           onAddNewTransaction={handleAddNewForCustomer}
+          onDeletePayment={handleDeletePayment}
         />
       )}
 
