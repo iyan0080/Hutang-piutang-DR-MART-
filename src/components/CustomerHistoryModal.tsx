@@ -162,12 +162,13 @@ export const CustomerHistoryModal: React.FC<CustomerHistoryModalProps> = ({
     }
   }, [periodPreset, startDate, endDate]);
 
-  // 3. Filtered transactions based on period, type, status, and search query
+  // 3. Filtered transactions based on period (by transactionDate), type, status, and search query
   const displayedTransactions = useMemo(() => {
     return allCustomerTransactions.filter(t => {
-      // Date filter
-      if (activeDateRange.start && t.transactionDate < activeDateRange.start) return false;
-      if (activeDateRange.end && t.transactionDate > activeDateRange.end) return false;
+      // Date filter based on transaction occurrence date (transactionDate)
+      const txDateStr = (t.transactionDate || '').slice(0, 10);
+      if (activeDateRange.start && txDateStr < activeDateRange.start) return false;
+      if (activeDateRange.end && txDateStr > activeDateRange.end) return false;
 
       // Type filter
       if (filterType !== 'all' && t.type !== filterType) return false;
@@ -217,13 +218,13 @@ export const CustomerHistoryModal: React.FC<CustomerHistoryModalProps> = ({
         if (t.status === 'lunas') hutangLunasCount++;
       }
 
-      // Count payments on these transactions
+      // Count payments on these transactions (using payment occurrence date p.date)
       if (t.payments && t.payments.length > 0) {
         t.payments.forEach(p => {
-          // If we want payments within date range
+          const payDateStr = (p.date || '').slice(0, 10);
           let isPaymentInRange = true;
-          if (activeDateRange.start && p.date < activeDateRange.start) isPaymentInRange = false;
-          if (activeDateRange.end && p.date > activeDateRange.end) isPaymentInRange = false;
+          if (activeDateRange.start && payDateStr < activeDateRange.start) isPaymentInRange = false;
+          if (activeDateRange.end && payDateStr > activeDateRange.end) isPaymentInRange = false;
           
           if (isPaymentInRange || periodPreset === 'all') {
             totalPaymentsInPeriod++;
@@ -633,6 +634,12 @@ export const CustomerHistoryModal: React.FC<CustomerHistoryModalProps> = ({
                 <span>Reset</span>
               </button>
             )}
+          </div>
+
+          {/* Indicator: Date of Occurrence */}
+          <div className="text-[11px] text-slate-500 flex items-center gap-1.5 bg-slate-50/80 px-2.5 py-1 rounded-lg border border-slate-200/60">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-teal-600 shrink-0"></span>
+            <span>Filter periode dihitung berdasarkan <strong>Tanggal Terjadinya Transaksi</strong> (bukan tanggal/waktu input).</span>
           </div>
 
           {/* Custom Date Range Picker (Only shown when 'custom' is selected) */}

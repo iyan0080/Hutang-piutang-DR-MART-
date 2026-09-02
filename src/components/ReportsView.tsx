@@ -52,19 +52,25 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
     const currentMonth = now.getMonth();
 
     return transactions.filter(t => {
-      const txDate = new Date(t.transactionDate);
+      const txDateStr = (t.transactionDate || '').slice(0, 10);
+      if (!txDateStr) return false;
 
-      // Period filter
+      // Extract year & month safely from YYYY-MM-DD string
+      const [txYear, txMonth] = txDateStr.split('-').map(Number);
+
+      // Period filter based on transaction occurrence date
       if (periodFilter === 'this_month') {
-        if (txDate.getFullYear() !== currentYear || txDate.getMonth() !== currentMonth) return false;
+        if (txYear !== currentYear || txMonth !== (currentMonth + 1)) return false;
       } else if (periodFilter === 'last_month') {
         const lastMonthDate = new Date(currentYear, currentMonth - 1, 1);
-        if (txDate.getFullYear() !== lastMonthDate.getFullYear() || txDate.getMonth() !== lastMonthDate.getMonth()) return false;
+        const expectedYear = lastMonthDate.getFullYear();
+        const expectedMonth = lastMonthDate.getMonth() + 1;
+        if (txYear !== expectedYear || txMonth !== expectedMonth) return false;
       } else if (periodFilter === 'this_year') {
-        if (txDate.getFullYear() !== currentYear) return false;
+        if (txYear !== currentYear) return false;
       } else if (periodFilter === 'custom') {
-        if (startDate && t.transactionDate < startDate) return false;
-        if (endDate && t.transactionDate > endDate) return false;
+        if (startDate && txDateStr < startDate) return false;
+        if (endDate && txDateStr > endDate) return false;
       }
 
       // Category filter
@@ -322,7 +328,13 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
         </div>
 
         {/* Filter Controls Bar */}
-        <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="mt-6 pt-4 border-t border-slate-100 space-y-3">
+          <div className="text-[11px] text-slate-500 flex items-center gap-1.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/60">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-teal-600 shrink-0"></span>
+            <span>Semua kalkulasi laporan & periode disaring berdasarkan <strong>Tanggal Terjadinya Transaksi</strong> (bukan tanggal input data).</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           
           {/* Period Filter */}
           <div>
@@ -389,6 +401,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
             </div>
           )}
 
+          </div>
         </div>
 
       </div>

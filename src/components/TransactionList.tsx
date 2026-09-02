@@ -106,9 +106,10 @@ export const TransactionList: React.FC<TransactionListProps> = ({
         return false;
       }
 
-      // 4. Date range filter (based on transactionDate)
-      if (filters.startDate && item.transactionDate < filters.startDate) return false;
-      if (filters.endDate && item.transactionDate > filters.endDate) return false;
+      // 4. Date range filter (based on transactionDate occurrence)
+      const txDateStr = (item.transactionDate || '').slice(0, 10);
+      if (filters.startDate && txDateStr < filters.startDate) return false;
+      if (filters.endDate && txDateStr > filters.endDate) return false;
 
       // 5. Amount range filter (Nominal range)
       if (filters.minAmount !== undefined && filters.minAmount > 0 && item.amount < filters.minAmount) {

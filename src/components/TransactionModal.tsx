@@ -396,10 +396,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             error={errors.amount}
           />
 
-          {/* Transaction Date */}
+          {/* Transaction Date (Date of Occurrence) */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">
-              Tanggal Transaksi <span className="text-rose-500">*</span>
+              Tanggal Terjadinya Transaksi <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
               <input
@@ -411,6 +411,9 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 }`}
               />
             </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              Pilih tanggal saat transaksi hutang/piutang ini sebenarnya terjadi (digunakan untuk filter laporan & periode).
+            </p>
             {errors.transactionDate && (
               <p className="text-[11px] text-rose-500 mt-1">{errors.transactionDate}</p>
             )}
