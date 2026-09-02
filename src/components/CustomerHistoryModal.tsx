@@ -31,7 +31,7 @@ import { formatRupiah, formatDate, formatDateTime } from '../utils/formatters';
 import { formatWhatsAppUrl } from '../utils/customerHelper';
 import * as XLSX from 'xlsx';
 
-export type PeriodPreset = 'all' | 'today' | 'last_7_days' | 'last_30_days' | 'this_month' | 'last_month' | 'this_year' | 'custom';
+export type PeriodPreset = 'all' | 'today' | 'this_month' | 'last_month' | 'this_year' | 'custom';
 
 interface CustomerHistoryModalProps {
   isOpen: boolean;
@@ -102,20 +102,6 @@ export const CustomerHistoryModal: React.FC<CustomerHistoryModalProps> = ({
       case 'today': {
         const todayStr = formatDateStr(now);
         return { start: todayStr, end: todayStr, label: `Hari Ini (${formatDate(todayStr)})` };
-      }
-      case 'last_7_days': {
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(now.getDate() - 6);
-        const start = formatDateStr(sevenDaysAgo);
-        const end = formatDateStr(now);
-        return { start, end, label: `7 Hari Terakhir (${formatDate(start)} - ${formatDate(end)})` };
-      }
-      case 'last_30_days': {
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(now.getDate() - 29);
-        const start = formatDateStr(thirtyDaysAgo);
-        const end = formatDateStr(now);
-        return { start, end, label: `30 Hari Terakhir (${formatDate(start)} - ${formatDate(end)})` };
       }
       case 'this_month': {
         const firstDay = new Date(currentYear, currentMonth, 1);
@@ -562,26 +548,6 @@ export const CustomerHistoryModal: React.FC<CustomerHistoryModalProps> = ({
               }`}
             >
               Hari Ini
-            </button>
-            <button
-              onClick={() => setPeriodPreset('last_7_days')}
-              className={`px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer ${
-                periodPreset === 'last_7_days'
-                  ? 'bg-teal-700 text-white font-bold shadow-2xs'
-                  : 'bg-white text-slate-700 border border-slate-200/80 hover:bg-slate-50'
-              }`}
-            >
-              7 Hari Terakhir
-            </button>
-            <button
-              onClick={() => setPeriodPreset('last_30_days')}
-              className={`px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer ${
-                periodPreset === 'last_30_days'
-                  ? 'bg-teal-700 text-white font-bold shadow-2xs'
-                  : 'bg-white text-slate-700 border border-slate-200/80 hover:bg-slate-50'
-              }`}
-            >
-              30 Hari Terakhir
             </button>
             <button
               onClick={() => setPeriodPreset('this_month')}
